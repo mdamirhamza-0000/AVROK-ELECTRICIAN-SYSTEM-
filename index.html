@@ -163,6 +163,8 @@ section{padding:84px 0}
 .contact-line span,.contact-line a{font-weight:600;word-break:break-word}
 .contact-box .btn{margin-top:12px}
 .form{display:grid;gap:14px;margin-top:6px}
+#request-card{scroll-margin-top:100px;transition:box-shadow .3s,border-color .3s}
+#request-card.flash{border-color:var(--yellow);box-shadow:0 0 0 5px rgba(255,196,0,.45),var(--shadow)}
 .form label{display:none}
 .form input,.form select,.form textarea{width:100%;padding:14px 16px;border:1.5px solid #d4dbe8;border-radius:12px;font:500 15.5px Inter,sans-serif;color:var(--ink);background:#fafbfd;transition:.15s}
 .form textarea{min-height:120px;resize:vertical}
@@ -233,7 +235,7 @@ footer p{font-size:14.5px;margin-bottom:6px}
       <div>📍 <b>Sector 10A, Gurgaon Khansa Mandi, Shakti Park, near SVM School, Gurgaon, Haryana 122001</b></div>
       <div>✉️ <b>avrokelectriciansystem@gmail.com</b></div>
     </div>
-    <a class="btn btn-dark btn-block" href="#contact">Request a Service →</a>
+    <a class="btn btn-dark btn-block" href="#request-card" data-goto="request-card">Request a Service →</a>
   </div>
 </div>
 </section>
@@ -326,7 +328,7 @@ footer p{font-size:14.5px;margin-bottom:6px}
       <div class="contact-line"><div class="ci">📍</div><div><b>Address</b><span>Sector 10A, Gurgaon Khansa Mandi, Shakti Park, near SVM School, Gurgaon, Haryana 122001</span></div></div>
       <a class="btn btn-yellow btn-block" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=AVROK+ELECTRICIAN+SYSTEM">📍 View on Google Maps</a>
     </div>
-    <div class="contact-box">
+    <div class="contact-box" id="request-card">
       <h3>Request a Service</h3>
       <form class="form" onsubmit="sendWhatsApp(event)">
         <input id="name" placeholder="Your name" required>
@@ -353,6 +355,13 @@ footer p{font-size:14.5px;margin-bottom:6px}
 </div>
 
 <script>
+document.querySelectorAll('[data-goto]').forEach(function(l){l.addEventListener('click',function(e){
+ var t=document.getElementById(l.getAttribute('data-goto'));if(!t)return;e.preventDefault();
+ var y=t.getBoundingClientRect().top+window.pageYOffset-100;
+ window.scrollTo({top:y,left:0,behavior:'smooth'});
+ t.classList.add('flash');setTimeout(function(){t.classList.remove('flash');},2200);
+ setTimeout(function(){var i=document.getElementById('name');if(i)try{i.focus({preventScroll:true});}catch(x){}},700);
+});});
 function sendWhatsApp(e){
  e.preventDefault();
  const n=document.getElementById('name').value, p=document.getElementById('phone').value, s=document.getElementById('service').value, m=document.getElementById('message').value;
