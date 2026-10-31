@@ -367,8 +367,16 @@ function sendWhatsApp(e){
  e.preventDefault();
  const f=e.target, g=k=>f.querySelector('[name="'+k+'"]').value;
  const n=g('name'), p=g('phone'), s=g('service'), m=g('message');
+
+ // Save the order in Avrok's Firebase (shown in the Avrok AC Service app). WhatsApp opens regardless.
+ try{
+  fetch('https://avrok-75ed7-default-rtdb.firebaseio.com/serviceOrders.json',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,
+   body:JSON.stringify({name:n.trim().slice(0,100),phone:p.trim().slice(0,20),service:s.slice(0,100),message:m.trim().slice(0,1000),source:(location.hostname||'avrok-acs.kesug.com').slice(0,100),status:'new',createdAt:{'.sv':'timestamp'}})
+  }).catch(function(){});
+ }catch(x){}
  const text=`Hello AVROK, I need electrical service.%0AName: ${encodeURIComponent(n)}`+(p.trim()?`%0AMobile: ${encodeURIComponent(p)}`:'')+`%0AService: ${encodeURIComponent(s)}%0AWork: ${encodeURIComponent(m)}`;
  const a=document.createElement('a');a.href='https://wa.me/919540307161?text='+text;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();document.body.removeChild(a);
+ f.reset();var pop=document.getElementById('rqm');if(pop&&pop.contains(f))pop.hidden=true;
 }
 </script>
 <div id="rqm" class="rqm" hidden><div class="rqc" id="rqc" role="dialog" aria-modal="true" aria-label="Request a Service">
