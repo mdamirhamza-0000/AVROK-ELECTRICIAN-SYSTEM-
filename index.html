@@ -339,7 +339,7 @@ footer p{font-size:14.5px;margin-bottom:6px}
       <h3>Request a Service</h3>
       <form class="form" onsubmit="sendWhatsApp(event)">
         <input id="name" name="name" placeholder="Your name" required>
-        <input id="phone" name="phone" placeholder="Mobile number" required>
+        <input id="phone" name="phone" type="tel" placeholder="Mobile number (optional)">
         <select id="service" name="service"><option>House Wiring</option><option>Electrical Repairing</option><option>DB &amp; MCB Installation</option><option>Panel Work</option><option>Geyser Installation &amp; Repair</option><option>Fan &amp; Appliance Installation</option><option>Lighting Solutions</option><option>CCTV &amp; Wi-Fi Camera</option><option>Other</option></select>
         <textarea id="message" name="message" placeholder="Describe the work you need"></textarea>
         <button class="btn btn-green" type="submit">💬 Send on WhatsApp</button>
@@ -366,7 +366,7 @@ function sendWhatsApp(e){
  e.preventDefault();
  const f=e.target, g=k=>f.querySelector('[name="'+k+'"]').value;
  const n=g('name'), p=g('phone'), s=g('service'), m=g('message');
- const text=`Hello AVROK, I need electrical service.%0AName: ${encodeURIComponent(n)}%0AMobile: ${encodeURIComponent(p)}%0AService: ${encodeURIComponent(s)}%0AWork: ${encodeURIComponent(m)}`;
+ const text=`Hello AVROK, I need electrical service.%0AName: ${encodeURIComponent(n)}`+(p.trim()?`%0AMobile: ${encodeURIComponent(p)}`:'')+`%0AService: ${encodeURIComponent(s)}%0AWork: ${encodeURIComponent(m)}`;
  const a=document.createElement('a');a.href='https://wa.me/919540307161?text='+text;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
 </script>
@@ -375,7 +375,7 @@ function sendWhatsApp(e){
   <h3>Request a Service</h3><div class="sub">Fill in the details and send on WhatsApp.</div>
   <form class="form" onsubmit="sendWhatsApp(event)">
     <input name="name" placeholder="Your name" required>
-    <input name="phone" type="tel" placeholder="Mobile number" required>
+    <input name="phone" type="tel" placeholder="Mobile number (optional)">
     <select name="service"><option>House Wiring</option><option>Electrical Repairing</option><option>DB &amp; MCB Installation</option><option>Panel Work</option><option>Geyser Installation &amp; Repair</option><option>Fan &amp; Appliance Installation</option><option>Lighting Solutions</option><option>CCTV &amp; Wi-Fi Camera</option><option>Other</option></select>
     <textarea name="message" placeholder="Describe the work you need"></textarea>
     <button class="btn btn-green" type="submit">💬 Send on WhatsApp</button>
