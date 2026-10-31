@@ -163,8 +163,6 @@ section{padding:84px 0}
 .contact-line span,.contact-line a{font-weight:600;word-break:break-word}
 .contact-box .btn{margin-top:12px}
 .form{display:grid;gap:14px;margin-top:6px}
-#request-card{scroll-margin-top:100px;transition:box-shadow .3s,border-color .3s}
-#request-card.flash{border-color:var(--yellow);box-shadow:0 0 0 5px rgba(255,196,0,.45),var(--shadow)}
 .form label{display:none}
 .form input,.form select,.form textarea{width:100%;padding:14px 16px;border:1.5px solid #d4dbe8;border-radius:12px;font:500 15.5px Inter,sans-serif;color:var(--ink);background:#fafbfd;transition:.15s}
 .form textarea{min-height:120px;resize:vertical}
@@ -185,6 +183,15 @@ footer p{font-size:14.5px;margin-bottom:6px}
 .fixed-buttons a{padding:17px 10px;text-align:center;font:800 16px Inter,sans-serif;letter-spacing:.4px}
 .fixed-buttons .whatsapp{background:#25d366;color:#fff}
 .fixed-buttons .call{background:var(--navy);color:#fff}
+
+
+/* Request popup */
+.rqm{position:fixed;inset:0;z-index:120;background:rgba(7,15,32,.72);display:grid;place-items:center;overflow:hidden}
+.rqm[hidden]{display:none}
+.rqc{width:400px;max-width:none;background:#fff;border-radius:20px;padding:26px 24px 24px;border-top:6px solid var(--yellow);box-shadow:0 30px 70px rgba(0,0,0,.5);position:relative;transform-origin:center center}
+.rqc h3{font:700 21px Poppins,sans-serif;color:var(--navy);margin-bottom:4px}
+.rqc .sub{font-size:13.5px;color:var(--muted);margin-bottom:14px}
+.rqx{position:absolute;top:8px;right:12px;background:none;border:0;font-size:32px;line-height:1;cursor:pointer;color:var(--navy)}
 
 /* Call popup (embedded view only) */
 .cm{position:fixed;inset:0;background:rgba(0,0,0,.65);display:grid;place-items:center;z-index:100;padding:20px}.cm[hidden]{display:none}
@@ -235,7 +242,7 @@ footer p{font-size:14.5px;margin-bottom:6px}
       <div>📍 <b>Sector 10A, Gurgaon Khansa Mandi, Shakti Park, near SVM School, Gurgaon, Haryana 122001</b></div>
       <div>✉️ <b>avrokelectriciansystem@gmail.com</b></div>
     </div>
-    <a class="btn btn-dark btn-block" href="#request-card" data-goto="request-card">Request a Service →</a>
+    <button type="button" class="btn btn-dark btn-block" data-open="rq">Request a Service →</button>
   </div>
 </div>
 </section>
@@ -328,13 +335,13 @@ footer p{font-size:14.5px;margin-bottom:6px}
       <div class="contact-line"><div class="ci">📍</div><div><b>Address</b><span>Sector 10A, Gurgaon Khansa Mandi, Shakti Park, near SVM School, Gurgaon, Haryana 122001</span></div></div>
       <a class="btn btn-yellow btn-block" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=AVROK+ELECTRICIAN+SYSTEM">📍 View on Google Maps</a>
     </div>
-    <div class="contact-box" id="request-card">
+    <div class="contact-box">
       <h3>Request a Service</h3>
       <form class="form" onsubmit="sendWhatsApp(event)">
-        <input id="name" placeholder="Your name" required>
-        <input id="phone" placeholder="Mobile number" required>
-        <select id="service"><option>House Wiring</option><option>Electrical Repairing</option><option>DB &amp; MCB Installation</option><option>Panel Work</option><option>Geyser Installation &amp; Repair</option><option>Fan &amp; Appliance Installation</option><option>Lighting Solutions</option><option>CCTV &amp; Wi-Fi Camera</option><option>Other</option></select>
-        <textarea id="message" placeholder="Describe the work you need"></textarea>
+        <input id="name" name="name" placeholder="Your name" required>
+        <input id="phone" name="phone" placeholder="Mobile number" required>
+        <select id="service" name="service"><option>House Wiring</option><option>Electrical Repairing</option><option>DB &amp; MCB Installation</option><option>Panel Work</option><option>Geyser Installation &amp; Repair</option><option>Fan &amp; Appliance Installation</option><option>Lighting Solutions</option><option>CCTV &amp; Wi-Fi Camera</option><option>Other</option></select>
+        <textarea id="message" name="message" placeholder="Describe the work you need"></textarea>
         <button class="btn btn-green" type="submit">💬 Send on WhatsApp</button>
       </form>
     </div>
@@ -355,19 +362,45 @@ footer p{font-size:14.5px;margin-bottom:6px}
 </div>
 
 <script>
-document.querySelectorAll('[data-goto]').forEach(function(l){l.addEventListener('click',function(e){
- var t=document.getElementById(l.getAttribute('data-goto'));if(!t)return;e.preventDefault();
- var y=t.getBoundingClientRect().top+window.pageYOffset-100;
- window.scrollTo({top:y,left:0,behavior:'smooth'});
- t.classList.add('flash');setTimeout(function(){t.classList.remove('flash');},2200);
- setTimeout(function(){var i=document.getElementById('name');if(i)try{i.focus({preventScroll:true});}catch(x){}},700);
-});});
 function sendWhatsApp(e){
  e.preventDefault();
- const n=document.getElementById('name').value, p=document.getElementById('phone').value, s=document.getElementById('service').value, m=document.getElementById('message').value;
+ const f=e.target, g=k=>f.querySelector('[name="'+k+'"]').value;
+ const n=g('name'), p=g('phone'), s=g('service'), m=g('message');
  const text=`Hello AVROK, I need electrical service.%0AName: ${encodeURIComponent(n)}%0AMobile: ${encodeURIComponent(p)}%0AService: ${encodeURIComponent(s)}%0AWork: ${encodeURIComponent(m)}`;
  const a=document.createElement('a');a.href='https://wa.me/919540307161?text='+text;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
+</script>
+<div id="rqm" class="rqm" hidden><div class="rqc" id="rqc" role="dialog" aria-modal="true" aria-label="Request a Service">
+  <button type="button" class="rqx" id="rqx" aria-label="Close">×</button>
+  <h3>Request a Service</h3><div class="sub">Fill in the details and send on WhatsApp.</div>
+  <form class="form" onsubmit="sendWhatsApp(event)">
+    <input name="name" placeholder="Your name" required>
+    <input name="phone" type="tel" placeholder="Mobile number" required>
+    <select name="service"><option>House Wiring</option><option>Electrical Repairing</option><option>DB &amp; MCB Installation</option><option>Panel Work</option><option>Geyser Installation &amp; Repair</option><option>Fan &amp; Appliance Installation</option><option>Lighting Solutions</option><option>CCTV &amp; Wi-Fi Camera</option><option>Other</option></select>
+    <textarea name="message" placeholder="Describe the work you need"></textarea>
+    <button class="btn btn-green" type="submit">💬 Send on WhatsApp</button>
+  </form>
+</div></div>
+<script>
+(function(){
+ var m=document.getElementById('rqm'),c=document.getElementById('rqc');
+ function fit(){ // keep the popup centred in what the person actually sees, at a readable size
+  var v=window.visualViewport;
+  if(!v){m.style.cssText='';c.style.transform='';return;}
+  m.style.left=v.offsetLeft+'px';m.style.top=v.offsetTop+'px';m.style.right='auto';m.style.bottom='auto';
+  m.style.width=v.width+'px';m.style.height=v.height+'px';
+  c.style.transform='none';
+  var s=Math.min(1/v.scale,(v.width*.94)/c.offsetWidth,(v.height*.94)/c.offsetHeight);
+  c.style.transform='scale('+s+')';
+ }
+ function open(){m.hidden=false;fit();setTimeout(function(){var i=c.querySelector('input');if(i)try{i.focus({preventScroll:true});}catch(x){}},80);}
+ function close(){m.hidden=true;}
+ document.querySelectorAll('[data-open="rq"]').forEach(function(b){b.addEventListener('click',open);});
+ document.getElementById('rqx').addEventListener('click',close);
+ m.addEventListener('click',function(e){if(e.target===m)close();});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+ if(window.visualViewport){visualViewport.addEventListener('resize',function(){if(!m.hidden)fit();});visualViewport.addEventListener('scroll',function(){if(!m.hidden)fit();});}
+})();
 </script>
 <div id="cm" class="cm" hidden><div class="cmb"><button type="button" class="cmx" id="cmx" aria-label="Close">×</button><div class="cmi">📞</div><h3>Call AVROK Electrician System</h3><div class="cmn">+91 95403 07161</div><button type="button" class="btn btn-yellow" id="cp">📋 Copy Number</button><a class="btn btn-green" href="https://wa.me/919540307161" target="_blank" rel="noopener">💬 Chat on WhatsApp</a><small>Tip: copy the number and paste it in your phone dialer.</small></div></div>
 <script>
